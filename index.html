@@ -5,80 +5,112 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HEKA Électricité</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #f8f9fa;
-            color: #333;
-            line-height: 1.6;
-        }
-        header {
-            background: #007bff;
-            color: #fff;
-            padding: 20px 0;
-            text-align: center;
-        }
-        header h1 {
-            margin: 0;
-            font-size: 2em;
-        }
-        section {
-            padding: 20px;
-            max-width: 900px;
-            margin: auto;
-            background: #fff;
-            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
-            margin-top: 20px;
-            border-radius: 8px;
-        }
-        h2 {
-            color: #007bff;
-        }
-        footer {
-            text-align: center;
-            padding: 15px;
-            margin-top: 20px;
-            background: #343a40;
-            color: #fff;
-        }
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f8f9fa; }
+        header { background: #007bff; color: #fff; padding: 20px; text-align: center; position: relative; }
+        header h1 { margin: 0; font-size: 2em; cursor: pointer; }
+        section { padding: 20px; max-width: 900px; margin: auto; background: #fff; box-shadow: 0px 0px 10px rgba(0,0,0,0.1); margin-top: 20px; border-radius: 8px; }
+        h2 { color: #007bff; }
+        footer { text-align: center; padding: 15px; margin-top: 20px; background: #343a40; color: #fff; }
+        input, textarea, button { width: 100%; padding: 10px; margin: 5px 0; border-radius: 5px; border: 1px solid #ccc; }
+        button { background: #007bff; color: white; border: none; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        #adminPanel { display: none; background: #ffeeba; padding: 10px; margin-top: 20px; border-radius: 8px; }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>HEKA Électricité</h1>
+    <h1 id="logo">H</h1>
     <p>Votre partenaire de confiance pour tous vos travaux d’électricité et du bâtiment</p>
 </header>
 
 <section>
     <h2>Qui sommes-nous ?</h2>
     <p>
-        HEKA Électricité est une société innovante qui met en relation les particuliers et les professionnels avec des 
-        artisans qualifiés dans le domaine de l’électricité et des métiers du BTP.  
-        Nous travaillons exclusivement avec des artisans partenaires soigneusement sélectionnés pour leur savoir-faire et leur expérience.
+        HEKA Électricité met en relation particuliers et entreprises avec des artisans qualifiés dans l’électricité et le BTP.
+        Tous nos partenaires sont experts dans leur domaine et soigneusement sélectionnés.
     </p>
 
-    <h2>Nos valeurs</h2>
+    <h2>Notre engagement</h2>
     <p>
-        ✔ Expertise : chaque artisan est un spécialiste dans son domaine.  
-        ✔ Fiabilité : nous respectons les délais et les engagements.  
-        ✔ Sécurité : un expert indépendant contrôle chaque intervention en fin de chantier pour garantir la conformité et la sécurité de vos installations.
+        ✔ Expertise et professionnalisme  
+        ✔ Partenaires qualifiés et fiables  
+        ✔ Contrôle qualité en fin de chantier par un expert indépendant  
     </p>
 
-    <h2>Notre engagement qualité</h2>
-    <p>
-        Pour chaque projet, nous assurons un suivi rigoureux :  
-        - Évaluation précise de vos besoins  
-        - Intervention rapide et efficace  
-        - Vérification finale par un expert certifié  
-        - Remise d’un rapport de conformité
-    </p>
+    <h2>Demandez un devis</h2>
+    <input type="text" id="nom" placeholder="Votre nom">
+    <input type="text" id="tel" placeholder="Téléphone">
+    <input type="email" id="email" placeholder="Email">
+    <input type="text" id="ville" placeholder="Ville">
+    <textarea id="description" placeholder="Décrivez votre besoin"></textarea>
+    <input type="file" id="photos" multiple>
+    <button onclick="genererRecap()">Générer le récapitulatif</button>
+
+    <div id="recap" style="display:none; margin-top:20px;">
+        <h3>Récapitulatif</h3>
+        <pre id="recapText"></pre>
+        <button onclick="envoyerEmail()">📧 Envoyer par Email</button>
+        <button onclick="envoyerWhatsApp()">💬 Envoyer sur WhatsApp</button>
+    </div>
+
+    <div id="adminPanel">
+        <h3>🔒 Estimation indicative (Interne)</h3>
+        <label>Marge (%)</label>
+        <input type="number" id="marge" value="70">
+        <label>Inclure prix dans récap client ?</label>
+        <select id="afficherPrix">
+            <option value="non">Non</option>
+            <option value="oui">Oui</option>
+        </select>
+    </div>
 </section>
 
 <footer>
     &copy; 2025 HEKA Électricité - Tous droits réservés
 </footer>
+
+<script>
+let clickCount = 0;
+document.getElementById("logo").addEventListener("click", () => {
+    clickCount++;
+    if (clickCount === 3) {
+        let code = prompt("Code admin ?");
+        if (code === "HEKA2025") {
+            document.getElementById("adminPanel").style.display = "block";
+        }
+        clickCount = 0;
+    }
+});
+
+function genererRecap() {
+    let nom = document.getElementById("nom").value;
+    let tel = document.getElementById("tel").value;
+    let email = document.getElementById("email").value;
+    let ville = document.getElementById("ville").value;
+    let description = document.getElementById("description").value;
+    let afficherPrix = document.getElementById("afficherPrix").value;
+
+    let recap = `Demande de devis HEKA Électricité\nNom: ${nom}\nTel: ${tel}\nEmail: ${email}\nVille: ${ville}\nDescription: ${description}`;
+    
+    if (afficherPrix === "oui") {
+        recap += `\nPrix indicatif: [à calculer selon marge]`;
+    }
+
+    document.getElementById("recapText").textContent = recap;
+    document.getElementById("recap").style.display = "block";
+}
+
+function envoyerEmail() {
+    let recap = document.getElementById("recapText").textContent;
+    window.location.href = `mailto:?subject=Demande de devis HEKA Électricité&body=${encodeURIComponent(recap)}`;
+}
+
+function envoyerWhatsApp() {
+    let recap = document.getElementById("recapText").textContent;
+    window.open(`https://wa.me/?text=${encodeURIComponent(recap)}`, "_blank");
+}
+</script>
 
 </body>
 </html>
