@@ -1,116 +1,360 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HEKA Électricité</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f8f9fa; }
-        header { background: #007bff; color: #fff; padding: 20px; text-align: center; position: relative; }
-        header h1 { margin: 0; font-size: 2em; cursor: pointer; }
-        section { padding: 20px; max-width: 900px; margin: auto; background: #fff; box-shadow: 0px 0px 10px rgba(0,0,0,0.1); margin-top: 20px; border-radius: 8px; }
-        h2 { color: #007bff; }
-        footer { text-align: center; padding: 15px; margin-top: 20px; background: #343a40; color: #fff; }
-        input, textarea, button { width: 100%; padding: 10px; margin: 5px 0; border-radius: 5px; border: 1px solid #ccc; }
-        button { background: #007bff; color: white; border: none; cursor: pointer; }
-        button:hover { background: #0056b3; }
-        #adminPanel { display: none; background: #ffeeba; padding: 10px; margin-top: 20px; border-radius: 8px; }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>HEKA Électricité — Devis & interventions BTP</title>
+  <meta name="description" content="HEKA Électricité : demande de devis, ajout de photos, contact direct. Partenaires artisans experts. Contrôle qualité en fin de chantier." />
+  <link rel="icon" href='data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="black"/><text x="50%" y="56%" font-size="40" text-anchor="middle" fill="white" font-family="Arial">H</text></svg>'/>
+  <style>
+    :root{
+      --bg:#0b0c0f;--panel:#111317;--muted:#8b94a7;--line:#1f2430;--brand:#0ea5e9;--brand2:#22c55e;--text:#e6e7ea;--white:#fff
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:linear-gradient(180deg,#0b0c0f,#0e1116);color:var(--text);font:15px/1.6 Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial}
+    a{color:inherit;text-decoration:none}
+    .container{max-width:1100px;margin:0 auto;padding:20px}
+    header{position:sticky;top:0;z-index:10;background:rgba(13,16,22,.75);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+    .brand{display:flex;align-items:center;gap:10px}
+    .logo{width:36px;height:36px;border-radius:10px;background:#000;display:grid;place-items:center;font-weight:900}
+    .logo span{color:#fff}
+    .nav{display:flex;gap:16px;font-weight:600;color:#b5bfd1}
+    .hero{margin-top:14px;border:1px solid var(--line);background:linear-gradient(135deg,#0d1118,#0f1724);border-radius:22px;padding:28px}
+    .grid{display:grid;gap:18px}
+    @media(min-width:980px){.grid-2{grid-template-columns:1.2fr .8fr}}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 8px 30px rgba(0,0,0,.25)}
+    h1{font-size:32px;line-height:1.15;margin:0 0 8px}
+    h2{font-size:20px;margin:0 0 8px}
+    .muted{color:var(--muted)}
+    .btn{display:inline-flex;align-items:center;justify-content:center;border-radius:12px;border:1px solid var(--line);padding:11px 14px;font-weight:800}
+    .btn.primary{background:var(--brand);color:#001018;border-color:transparent}
+    .btn.secondary{background:#1b2433}
+    .btn.ghost{background:transparent}
+    .rowline{display:flex;align-items:center;justify-content:space-between;background:#0e1320;border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:8px}
+    input,select,textarea{width:100%;background:#0d1016;border:1px solid #20283a;border-radius:12px;color:var(--text);padding:12px}
+    textarea{min-height:120px;resize:vertical}
+    .photos{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+    .thumb{position:relative;border:1px solid #2a3347;border-radius:10px;overflow:hidden}
+    .thumb img{width:100%;height:90px;object-fit:cover;display:block}
+    .x{position:absolute;top:6px;right:6px;border-radius:10px;background:rgba(0,0,0,.5);padding:0 6px}
+    .badges{display:flex;gap:8px;flex-wrap:wrap}
+    .badge{font-size:12px;border:1px solid var(--line);padding:6px 8px;border-radius:999px;background:#0d141e}
+    footer{border-top:1px solid var(--line);margin-top:28px;color:#93a1b5}
+    pre{background:#0a0f1a;border:1px solid #121a2a;border-radius:12px;padding:12px;white-space:pre-wrap}
+    .pill{font-size:12px;border:1px solid var(--line);padding:4px 8px;border-radius:999px;background:#0d141e;display:none}
+    .toast{position:fixed;bottom:16px;right:16px;background:#0d141e;border:1px solid #22304a;padding:10px 14px;border-radius:10px;display:none}
+    .ok{color:var(--brand2);font-weight:800}
+    .warn{color:#fbbf24;font-weight:800}
+    .danger{color:#fb7185;font-weight:800}
+  </style>
 </head>
 <body>
-
-<header>
-    <h1 id="logo">H</h1>
-    <p>Votre partenaire de confiance pour tous vos travaux d’électricité et du bâtiment</p>
-</header>
-
-<section>
-    <h2>Qui sommes-nous ?</h2>
-    <p>
-        HEKA Électricité met en relation particuliers et entreprises avec des artisans qualifiés dans l’électricité et le BTP.
-        Tous nos partenaires sont experts dans leur domaine et soigneusement sélectionnés.
-    </p>
-
-    <h2>Notre engagement</h2>
-    <p>
-        ✔ Expertise et professionnalisme  
-        ✔ Partenaires qualifiés et fiables  
-        ✔ Contrôle qualité en fin de chantier par un expert indépendant  
-    </p>
-
-    <h2>Demandez un devis</h2>
-    <input type="text" id="nom" placeholder="Votre nom">
-    <input type="text" id="tel" placeholder="Téléphone">
-    <input type="email" id="email" placeholder="Email">
-    <input type="text" id="ville" placeholder="Ville">
-    <textarea id="description" placeholder="Décrivez votre besoin"></textarea>
-    <input type="file" id="photos" multiple>
-    <button onclick="genererRecap()">Générer le récapitulatif</button>
-
-    <div id="recap" style="display:none; margin-top:20px;">
-        <h3>Récapitulatif</h3>
-        <pre id="recapText"></pre>
-        <button onclick="envoyerEmail()">📧 Envoyer par Email</button>
-        <button onclick="envoyerWhatsApp()">💬 Envoyer sur WhatsApp</button>
+  <header>
+    <div class="container" style="display:flex;align-items:center;justify-content:space-between;padding:12px 6px">
+      <div class="brand">
+        <div id="logoHit" class="logo" title="Admin (triple-clic)"><span>H</span></div>
+        <div>
+          <div style="font-weight:900">HEKA Électricité</div>
+          <div class="muted" style="margin-top:2px">Artisans experts · FR & CH</div>
+        </div>
+      </div>
+      <nav class="nav">
+        <a href="#devis">Demander un devis</a>
+        <a href="#pourquoi">Pourquoi HEKA</a>
+      </nav>
+      <div id="adminBadge" class="pill">Admin ON</div>
     </div>
+  </header>
 
-    <div id="adminPanel">
-        <h3>🔒 Estimation indicative (Interne)</h3>
-        <label>Marge (%)</label>
-        <input type="number" id="marge" value="70">
-        <label>Inclure prix dans récap client ?</label>
-        <select id="afficherPrix">
-            <option value="non">Non</option>
-            <option value="oui">Oui</option>
-        </select>
+  <main class="container">
+    <section class="hero grid grid-2">
+      <div>
+        <h1>Réparez, installez, rénovez.<br/>Sans inscription. Zéro friction.</h1>
+        <p class="muted">Partenariats avec artisans <strong>vérifiés</strong>. Contrôle <strong>qualité & sécurité</strong> en fin de chantier par un expert.</p>
+        <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+          <a class="btn primary" href="#devis">Démarrer un devis</a>
+          <a class="btn secondary" href="#pourquoi">Notre méthode</a>
+        </div>
+        <div class="badges" style="margin-top:14px">
+          <div class="badge">Réponse &lt; 1h ouvrée</div>
+          <div class="badge">Photos (8 max)</div>
+          <div class="badge">Devis clair</div>
+          <div class="badge">Suivi client</div>
+        </div>
+      </div>
+      <div class="card">
+        <h2 style="margin:0 0 4px">Message important</h2>
+        <p class="muted" style="margin:0">Aucun prix affiché côté client. Un module d’estimation **interne** est disponible en mode Admin.</p>
+      </div>
+    </section>
+
+    <section id="devis" class="grid grid-2" style="margin-top:18px">
+      <div class="card">
+        <h2>Votre besoin</h2>
+        <div class="muted">2 minutes, pas de compte.</div>
+        <div style="display:grid;gap:12px;margin-top:10px">
+          <div style="display:grid;gap:12px;grid-template-columns:1fr 1fr">
+            <div><label>Nom / Prénom</label><input id="name" placeholder="Jean Dupont"/></div>
+            <div><label>Téléphone</label><input id="phone" placeholder="06…"/></div>
+            <div><label>Email</label><input id="email" type="email" placeholder="vous@email.com"/></div>
+            <div><label>Ville</label><input id="city" placeholder="Saint-Étienne"/></div>
+            <div style="grid-column:1/-1"><label>Adresse (optionnel)</label><input id="address" placeholder="9 rue Théodore de Banville"/></div>
+            <div><label>Catégorie</label>
+              <select id="category">
+                <option value="electricite">Électricité</option><option value="plomberie">Plomberie</option>
+                <option value="chauffage">Chauffage</option><option value="climatisation">Climatisation</option>
+                <option value="peinture">Peinture</option><option value="renovation">Rénovation</option><option value="autre">Autre</option>
+              </select>
+            </div>
+            <div><label>Urgence</label>
+              <select id="urgency">
+                <option value="standard">Standard (48–72h)</option>
+                <option value="rapide">Rapide (24–48h)</option>
+                <option value="urgent24h">Urgent (&lt;24h)</option>
+              </select>
+            </div>
+            <div style="grid-column:1/-1">
+              <label>Complexité (1 facile → 5 complexe)</label>
+              <input id="complexity" type="range" min="1" max="5" step="1" value="2"/>
+              <div class="muted">Niveau: <span id="cxv">2</span>/5</div>
+            </div>
+            <div style="grid-column:1/-1">
+              <label>Fourniture des matériaux</label>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <button type="button" class="btn secondary" id="matClient">Client</button>
+                <button type="button" class="btn ghost" id="matPro">HEKA (pro)</button>
+              </div>
+            </div>
+            <div style="grid-column:1/-1">
+              <label>Décrivez le besoin</label>
+              <textarea id="desc" placeholder="Disjoncteur qui saute, création de 2 prises…"></textarea>
+            </div>
+            <div style="grid-column:1/-1">
+              <label>Photos (max 8)</label>
+              <input id="photos" type="file" accept="image/*" multiple />
+              <div id="gallery" class="photos" style="margin-top:8px"></div>
+            </div>
+            <div><label>Date souhaitée</label><input id="date" type="date"/></div>
+            <div><label>Heure souhaitée</label><input id="time" type="time"/></div>
+          </div>
+
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
+            <button id="sendBtn" class="btn primary">Envoyer la demande</button>
+            <button id="copyBtn" class="btn">Copier le récap</button>
+            <a id="waBtn" class="btn" target="_blank" rel="noreferrer" href="#">WhatsApp</a>
+            <a id="mailtoBtn" class="btn" href="#">E-mail</a>
+          </div>
+          <div class="muted">En envoyant, vous acceptez un traitement minimal des données pour répondre à votre demande.</div>
+        </div>
+      </div>
+
+      <!-- Admin (caché) -->
+      <aside id="adminCol" class="card" style="display:none">
+        <h2>Estimation indicative (interne)</h2>
+        <div class="muted">Non visible par le client.</div>
+        <div id="estRows" style="margin-top:8px"></div>
+        <div style="margin-top:10px">
+          <label>Marge HEKA (%)</label>
+          <input id="margin" type="range" min="0" max="150" value="70"/>
+          <div class="muted" style="display:flex;justify-content:space-between"><span>0%</span><span>150%</span></div>
+        </div>
+        <label style="margin-top:10px"><input type="checkbox" id="includePrice"> Inclure prix dans le récap client</label>
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <button class="btn" id="logoutAdmin">Quitter admin</button>
+        </div>
+      </aside>
+    </section>
+
+    <section id="pourquoi" class="card" style="margin-top:18px">
+      <h2>Pourquoi HEKA ?</h2>
+      <ul class="muted" style="margin:8px 0 0 18px">
+        <li>Artisans <strong>experts & assurés</strong>, sélectionnés pour leur qualité.</li>
+        <li><strong>Contrôle qualité & sécurité</strong> : un expert vérifie chaque intervention en fin de chantier.</li>
+        <li>Devis clair, délais tenus, suivi client.</li>
+      </ul>
+    </section>
+
+    <section class="card" style="margin-top:18px;display:none" id="recap">
+      <h2>Récapitulatif</h2>
+      <pre id="summaryBox"></pre>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container" style="display:flex;align-items:center;justify-content:space-between;padding:16px 6px;flex-wrap:wrap;gap:8px">
+      <div>© <span id="year"></span> HEKA GROUP – HEKA Électricité</div>
+      <div class="muted">Mentions légales · Confidentialité</div>
     </div>
-</section>
+  </footer>
 
-<footer>
-    &copy; 2025 HEKA Électricité - Tous droits réservés
-</footer>
+  <!-- Toast -->
+  <div id="toast" class="toast"></div>
 
-<script>
-let clickCount = 0;
-document.getElementById("logo").addEventListener("click", () => {
-    clickCount++;
-    if (clickCount === 3) {
-        let code = prompt("Code admin ?");
-        if (code === "HEKA2025") {
-            document.getElementById("adminPanel").style.display = "block";
-        }
-        clickCount = 0;
+  <script>
+    // -------- CONFIG À RENSEIGNER ----------
+    const FORMSPREE_ENDPOINT = "https://formspree.io/f/XXXXXXXX"; // <- remplace par ton endpoint Formspree
+    const WHATSAPP_NUMBER = "33600000000"; // <- ton n° au format international sans + (ex: 33612345678)
+    // ---------------------------------------
+
+    const € = (v)=> new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR'}).format(v);
+    const byId = (id)=> document.getElementById(id);
+    const t = (msg,type="ok") => { const el=byId('toast'); el.textContent=msg; el.className='toast '+type; el.style.display='block'; setTimeout(()=> el.style.display='none', 2800); };
+
+    const state = { materials:'client', marginPct:70, admin:false, includePrice:false, adminPass:'HEKA2025' };
+    const basePrices = { electricite:120, plomberie:110, chauffage:140, climatisation:160, peinture:90, renovation:180, autre:100 };
+    const urgencyMul = { standard:1, rapide:1.25, urgent24h:1.5 };
+    const matMul = { client:1, pro:1.35 };
+    const cxMul = c=> 0.8 + c*0.3;
+
+    function buildSummary(){
+      const name=byId('name').value.trim();
+      const phone=byId('phone').value.trim();
+      const email=byId('email').value.trim();
+      const city=byId('city').value.trim();
+      const address=byId('address').value.trim();
+      const category=byId('category').value;
+      const urgency=byId('urgency').value;
+      const complexity=byId('complexity').value;
+      const desc=byId('desc').value.trim();
+      const date=byId('date').value; const time=byId('time').value;
+
+      const catLabel={electricite:"Électricité",plomberie:"Plomberie",chauffage:"Chauffage",climatisation:"Climatisation",peinture:"Peinture",renovation:"Rénovation",autre:"Autre"}[category];
+      const urgLabel={standard:"Standard (48–72h)",rapide:"Rapide (24–48h)",urgent24h:"Urgent (<24h)"}[urgency];
+
+      // Estimation interne
+      const base = basePrices[category]||100;
+      const subtotal = base*urgencyMul[urgency]*matMul[state.materials]*cxMul(Number(complexity));
+      const estHT = Math.round((subtotal*(1+state.marginPct/100))/5)*5;
+      const estTTC = estHT*1.2;
+
+      let lines = [
+        "HEKA Électricité – Demande",
+        "",
+        `Client: ${name}`,
+        `Téléphone: ${phone}`,
+        `Email: ${email}`,
+        `Adresse: ${address} ${city}`.trim(),
+        `Catégorie: ${catLabel}`,
+        `Urgence: ${urgLabel}`,
+        `Complexité: ${complexity}/5`,
+        `Fourniture matériaux: ${state.materials==='pro'?'HEKA (pro)':'Client'}`,
+        "",
+        "Description:",
+        desc || "(non précisée)",
+        ""
+      ];
+      if(state.admin && state.includePrice){
+        lines.push(`Estimation (indicative): ${€(estHT)} HT (~${€(estTTC)} TTC)`, "", `Marge (interne): ${state.marginPct}%`);
+      }
+      lines.push("", `Préférence d’intervention: ${(date||time)? (date+" "+time).trim() : "Non précisé"}`);
+      return { text: lines.join("\n"), estHT, estTTC, base };
     }
-});
 
-function genererRecap() {
-    let nom = document.getElementById("nom").value;
-    let tel = document.getElementById("tel").value;
-    let email = document.getElementById("email").value;
-    let ville = document.getElementById("ville").value;
-    let description = document.getElementById("description").value;
-    let afficherPrix = document.getElementById("afficherPrix").value;
-
-    let recap = `Demande de devis HEKA Électricité\nNom: ${nom}\nTel: ${tel}\nEmail: ${email}\nVille: ${ville}\nDescription: ${description}`;
-    
-    if (afficherPrix === "oui") {
-        recap += `\nPrix indicatif: [à calculer selon marge]`;
+    function renderAdmin(){
+      if(!state.admin) return;
+      const {estHT,estTTC,base} = buildSummary();
+      const box = byId('estRows'); box.innerHTML="";
+      const rows = [
+        ["Base", €(base)],
+        ["Urgence", "× "+urgencyMul[byId('urgency').value]],
+        ["Matériaux", "× "+matMul[state.materials]],
+        ["Complexité", "× "+cxMul(Number(byId('complexity').value)).toFixed(2)],
+        ["—","—"],
+        ["Marge HEKA", state.marginPct+"%"],
+        ["Estimation HT", €(estHT)],
+        ["Estimation TTC (20%)", €(estTTC)],
+      ];
+      rows.forEach(([k,v])=>{
+        const d=document.createElement('div'); d.className="rowline"; d.innerHTML=`<div>${k}</div><div style="font-weight:800">${v}</div>`; box.appendChild(d);
+      });
     }
 
-    document.getElementById("recapText").textContent = recap;
-    document.getElementById("recap").style.display = "block";
-}
+    // UI bindings
+    byId('complexity').addEventListener('input',e=>{byId('cxv').textContent=e.target.value; renderAdmin();});
+    ['category','urgency'].forEach(id=> byId(id).addEventListener('change', renderAdmin));
 
-function envoyerEmail() {
-    let recap = document.getElementById("recapText").textContent;
-    window.location.href = `mailto:?subject=Demande de devis HEKA Électricité&body=${encodeURIComponent(recap)}`;
-}
+    function setMatBtns(){
+      byId('matClient').className = 'btn secondary'+(state.materials==='client'?'':'');
+      byId('matPro').className = 'btn ghost'+(state.materials==='pro'?' secondary':'');
+    }
+    byId('matClient').addEventListener('click',()=>{state.materials='client'; setMatBtns(); renderAdmin();});
+    byId('matPro').addEventListener('click',()=>{state.materials='pro'; setMatBtns(); renderAdmin();});
+    setMatBtns();
 
-function envoyerWhatsApp() {
-    let recap = document.getElementById("recapText").textContent;
-    window.open(`https://wa.me/?text=${encodeURIComponent(recap)}`, "_blank");
-}
-</script>
+    // Share + recap
+    function updateShare(){
+      const s = buildSummary().text;
+      byId('summaryBox').textContent = s;
+      byId('recap').style.display='block';
+      byId('mailtoBtn').setAttribute('href', "mailto:?subject=Demande de devis – HEKA&body="+encodeURIComponent(s));
+      const phone = WHATSAPP_NUMBER.replace(/\D/g,'');
+      byId('waBtn').setAttribute('href', "https://wa.me/"+phone+"?text="+encodeURIComponent(s));
+    }
+    byId('copyBtn').addEventListener('click',()=>{navigator.clipboard.writeText(buildSummary().text); t("Récap copié","ok"); updateShare();});
 
+    // Send: Formspree + WhatsApp fallback
+    byId('sendBtn').addEventListener('click', async ()=>{
+      const {text} = buildSummary();
+      updateShare();
+
+      // WhatsApp direct
+      const phone = WHATSAPP_NUMBER.replace(/\D/g,'');
+      window.open("https://wa.me/"+phone+"?text="+encodeURIComponent(text), "_blank");
+
+      // Email via Formspree (si configuré)
+      if(FORMSPREE_ENDPOINT.includes("formspree.io/f/")){
+        try{
+          const payload = {
+            name: byId('name').value, phone: byId('phone').value, email: byId('email').value,
+            city: byId('city').value, address: byId('address').value,
+            category: byId('category').value, urgency: byId('urgency').value,
+            complexity: byId('complexity').value, materials: state.materials,
+            description: byId('desc').value, date: byId('date').value, time: byId('time').value,
+            summary: text
+          };
+          const res = await fetch(FORMSPREE_ENDPOINT, { method:"POST", headers:{ "Accept":"application/json","Content-Type":"application/json" }, body: JSON.stringify(payload) });
+          if(res.ok){ t("Demande envoyée (e-mail)","ok"); } else { t("Échec e-mail, vérifie Formspree","danger"); }
+        }catch(e){ t("Erreur réseau (Formspree)","danger"); }
+      } else {
+        t("Configure Formspree pour l’e-mail","warn");
+      }
+    });
+
+    // Admin gate
+    let clicks=0,timer=null;
+    byId('logoHit').addEventListener('click', ()=>{
+      clicks++; if(timer) clearTimeout(timer); timer=setTimeout(()=>{clicks=0},700);
+      if(clicks>=3){
+        clicks=0; const code=prompt("Code admin ?"); 
+        if(code===state.adminPass){ 
+          state.admin=true; localStorage.setItem('heka_admin','1');
+          byId('adminCol').style.display='block'; byId('adminBadge').style.display='inline-block'; renderAdmin(); 
+        } else { t("Code incorrect","danger"); }
+      }
+    });
+    byId('logoutAdmin').addEventListener('click', ()=>{ state.admin=false; localStorage.removeItem('heka_admin'); byId('adminCol').style.display='none'; byId('adminBadge').style.display='none'; });
+    // Margin + include price
+    const savedMargin=localStorage.getItem('heka_margin_pct'); if(savedMargin){ byId('margin').value = state.marginPct = Number(savedMargin); }
+    byId('margin').addEventListener('input',e=>{ state.marginPct=Number(e.target.value); localStorage.setItem('heka_margin_pct',String(state.marginPct)); renderAdmin(); });
+    const savedInc=localStorage.getItem('heka_include_price'); if(savedInc){ state.includePrice = savedInc==='1'; byId('includePrice').checked = state.includePrice; }
+    byId('includePrice').addEventListener('change',e=>{ state.includePrice=!!e.target.checked; localStorage.setItem('heka_include_price', state.includePrice?'1':'0'); });
+
+    // Photos preview
+    byId('photos').addEventListener('change', (e)=>{
+      const files = Array.from(e.target.files||[]).slice(0,8);
+      const gal = byId('gallery'); gal.innerHTML='';
+      files.forEach((f,i)=>{
+        const url=URL.createObjectURL(f);
+        const d=document.createElement('div'); d.className='thumb';
+        d.innerHTML = `<img src="${url}" alt="photo ${i}"><button class="x">×</button>`;
+        d.querySelector('.x').addEventListener('click',()=>{ d.remove(); });
+        gal.appendChild(d);
+      });
+    });
+
+    // Init
+    byId('year').textContent = new Date().getFullYear();
+    if(localStorage.getItem('heka_admin')==='1'){ state.admin=true; byId('adminCol').style.display='block'; byId('adminBadge').style.display='inline-block'; renderAdmin(); }
+  </script>
 </body>
 </html>
