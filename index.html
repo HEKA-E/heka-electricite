@@ -1,143 +1,226 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HEKA Électricité - Devis en ligne</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>HEKA Électricité — Devis & interventions BTP</title>
+  <meta name="description" content="HEKA Électricité : artisans experts, devis rapide, contrôle qualité par expert. Envoyez votre demande avec photos." />
+  <link rel="icon" href='data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="black"/><text x="50%" y="56%" font-size="40" text-anchor="middle" fill="white" font-family="Arial">H</text></svg>'/>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f8f9fa;
-      margin: 0;
-      padding: 0;
-    }
-    header {
-      background-color: #222;
-      color: white;
-      padding: 15px 20px;
-      text-align: center;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 26px;
-    }
-    header p {
-      margin: 5px 0 0;
-      font-size: 14px;
-    }
-    section {
-      max-width: 800px;
-      margin: 20px auto;
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
-    }
-    h2 {
-      color: #333;
-      border-bottom: 2px solid #f1f1f1;
-      padding-bottom: 5px;
-    }
-    p {
-      color: #555;
-      line-height: 1.5;
-    }
-    form {
-      display: flex;
-      flex-direction: column;
-    }
-    label {
-      margin-top: 10px;
-      font-weight: bold;
-    }
-    input, textarea, select {
-      padding: 10px;
-      margin-top: 5px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-    button {
-      margin-top: 15px;
-      padding: 12px;
-      border: none;
-      background-color: #ff6600;
-      color: white;
-      font-size: 16px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #e65c00;
-    }
-    footer {
-      background-color: #222;
-      color: white;
-      text-align: center;
-      padding: 10px;
-      margin-top: 20px;
-    }
-    .contact-info {
-      background: #f1f1f1;
-      padding: 15px;
-      border-radius: 5px;
-      margin-top: 20px;
-      font-size: 14px;
-    }
+    :root{--bg:#0b0c0f;--panel:#111317;--muted:#8b94a7;--line:#1f2430;--brand:#0ea5e9;--ok:#22c55e;--text:#e6e7ea}
+    *{box-sizing:border-box}
+    body{margin:0;background:#0c1016;color:var(--text);font:15px/1.6 Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial}
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+    .container{max-width:1100px;margin:0 auto;padding:20px}
+    header{position:sticky;top:0;z-index:10;background:rgba(13,16,22,.8);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+    .brand{display:flex;align-items:center;gap:10px}
+    .logo{width:36px;height:36px;border-radius:10px;background:#000;display:grid;place-items:center;font-weight:900;color:#fff}
+    nav{display:flex;gap:16px;font-weight:600;color:#b5bfd1}
+    .hero{border:1px solid var(--line);border-radius:22px;overflow:hidden}
+    .hero-img{height:360px;background:url('https://source.unsplash.com/1600x600/?electricity,industrial') center/cover no-repeat}
+    .hero-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;background:linear-gradient(135deg,#0d1118,#0f1724);padding:16px 18px}
+    .kpis{display:flex;gap:8px;flex-wrap:wrap}
+    .badge{font-size:12px;border:1px solid var(--line);padding:6px 10px;border-radius:999px;background:#0d141e}
+    h1{font-size:32px;line-height:1.15;margin:0}
+    h2{font-size:22px;margin:0 0 12px}
+    .grid{display:grid;gap:18px}
+    @media(min-width:980px){.grid-3{grid-template-columns:repeat(3,1fr)}.grid-2{grid-template-columns:1.1fr .9fr}}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 8px 30px rgba(0,0,0,.25)}
+    .muted{color:var(--muted)}
+    .btn{display:inline-flex;align-items:center;justify-content:center;border-radius:12px;border:1px solid var(--line);padding:11px 14px;font-weight:800;cursor:pointer}
+    .btn.primary{background:var(--brand);color:#001018;border-color:transparent}
+    .btn.whatsapp{background:#25D366;color:#001018;border-color:transparent}
+    input,select,textarea{width:100%;background:#0d1016;border:1px solid #20283a;border-radius:12px;color:var(--text);padding:12px}
+    textarea{min-height:120px;resize:vertical}
+    .photos{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+    .thumb{position:relative;border:1px solid #2a3347;border-radius:10px;overflow:hidden}
+    .thumb img{width:100%;height:90px;object-fit:cover}
+    .x{position:absolute;top:6px;right:6px;border-radius:10px;background:rgba(0,0,0,.55);padding:0 6px}
+    footer{border-top:1px solid var(--line);margin-top:28px;color:#93a1b5}
+    pre{background:#0a0f1a;border:1px solid #121a2a;border-radius:12px;padding:12px;white-space:pre-wrap}
+    .pill{font-size:12px;border:1px solid var(--line);padding:4px 8px;border-radius:999px;background:#0d141e;display:none}
   </style>
 </head>
 <body>
+  <!-- En-tête -->
+  <header>
+    <div class="container" style="display:flex;align-items:center;justify-content:space-between;padding:12px 6px">
+      <div class="brand">
+        <div id="logoHit" class="logo" title="Admin (triple-clic)">H</div>
+        <div>
+          <div style="font-weight:900">HEKA Électricité</div>
+          <div class="muted" style="margin-top:2px">Artisans experts · FR & CH</div>
+        </div>
+      </div>
+      <nav>
+        <a href="#devis">Demander un devis</a>
+        <a href="#services">Services</a>
+        <a href="#securite">Sécurité</a>
+      </nav>
+      <div id="adminBadge" class="pill">Admin ON</div>
+    </div>
+  </header>
 
-<header>
-  <h1>HEKA Électricité</h1>
-  <p>Votre partenaire de confiance pour tous vos travaux électriques</p>
-</header>
+  <main class="container">
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-img"></div>
+      <div class="hero-bar">
+        <div>
+          <h1>Réparez, installez, rénovez.<br/>Devis en ligne en 2 minutes.</h1>
+          <div class="muted">Partenariats avec artisans <strong>vérifiés</strong>. Contrôle <strong>qualité & sécurité</strong> en fin de chantier par un expert.</div>
+          <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+            <a class="btn primary" href="#devis">Démarrer un devis</a>
+            <a class="btn whatsapp" href="https://wa.me/33769313309" target="_blank" rel="noreferrer">WhatsApp direct</a>
+          </div>
+        </div>
+        <div class="kpis">
+          <div class="badge">Réponse &lt; 1h ouvrée</div>
+          <div class="badge">Zones FR · CH</div>
+          <div class="badge">Photos (8 max)</div>
+          <div class="badge">Devis clair</div>
+        </div>
+      </div>
+    </section>
 
-<section>
-  <h2>Qui sommes-nous ?</h2>
-  <p>
-    HEKA Électricité est un réseau de **partenaires artisans experts** dans chaque domaine
-    : électricité, plomberie, rénovation et plus encore.  
-    Nous garantissons la qualité en faisant intervenir un **expert indépendant** pour vérifier
-    chaque chantier avant validation finale.
-  </p>
+    <!-- Services avec photos -->
+    <section id="services" class="grid grid-3" style="margin-top:18px">
+      <article class="card">
+        <img src="https://source.unsplash.com/400x260/?electrician,cable" alt="Électricité">
+        <h2>Électricité</h2>
+        <p class="muted">Dépannage, mises aux normes, tableaux, luminaires, prises, IRVE.</p>
+      </article>
+      <article class="card">
+        <img src="https://source.unsplash.com/400x260/?plumber,pipe" alt="Plomberie">
+        <h2>Plomberie</h2>
+        <p class="muted">Fuites, chauffe-eau, salles de bain, robinetterie, évacuations.</p>
+      </article>
+      <article class="card">
+        <img src="https://source.unsplash.com/400x260/?renovation,construction" alt="Rénovation">
+        <h2>Rénovation</h2>
+        <p class="muted">Petite rénovation, peinture, cloisons, coordination multi-métiers.</p>
+      </article>
+    </section>
 
-  <h2>Demande de devis</h2>
-  <p>Remplissez le formulaire ci-dessous et nous vous recontacterons rapidement.</p>
+    <!-- Sécurité/Qualité -->
+    <section id="securite" class="grid grid-2" style="margin-top:18px">
+      <div class="card">
+        <h2>Sécurité & contrôle qualité</h2>
+        <p class="muted">Un <strong>expert indépendant</strong> passe en fin de chantier pour vérifier l’intervention, valider la conformité et la sécurité avant clôture. Rapport possible sur demande.</p>
+        <ul class="muted">
+          <li>Artisans assurés et vérifiés</li>
+          <li>Suivi client & respect des délais</li>
+          <li>Devis clair avant intervention</li>
+        </ul>
+      </div>
+      <div class="card">
+        <img src="https://source.unsplash.com/700x420/?construction,safety" alt="Contrôle sécurité chantier">
+      </div>
+    </section>
 
-  <form action="https://formspree.io/f/mblkqpjz" method="POST">
-    <label>Nom et prénom :</label>
-    <input type="text" name="nom" required>
+    <!-- Devis / Formulaire -->
+    <section id="devis" class="grid grid-2" style="margin-top:18px">
+      <div class="card">
+        <h2>Votre demande de devis</h2>
+        <div class="muted">Formulaire rapide — vous pouvez joindre des photos.</div>
+        <!-- Formspree -->
+        <form id="fsForm" action="https://formspree.io/f/mblkqpjz" method="POST" enctype="multipart/form-data" style="display:grid;gap:12px;margin-top:10px">
+          <input type="text" name="nom" placeholder="Nom / Prénom" required>
+          <div style="display:grid;gap:12px;grid-template-columns:1fr 1fr">
+            <input type="tel" name="telephone" placeholder="Téléphone" required>
+            <input type="email" name="email" placeholder="Email" required>
+          </div>
+          <div style="display:grid;gap:12px;grid-template-columns:1fr 1fr">
+            <input type="text" name="ville" placeholder="Ville" required>
+            <input type="text" name="adresse" placeholder="Adresse (optionnel)">
+          </div>
+          <div style="display:grid;gap:12px;grid-template-columns:1fr 1fr">
+            <select name="categorie" required>
+              <option value="">Catégorie</option>
+              <option>Électricité</option><option>Plomberie</option><option>Chauffage</option>
+              <option>Climatisation</option><option>Peinture</option><option>Rénovation</option><option>Autre</option>
+            </select>
+            <select name="urgence" required>
+              <option value="">Urgence</option>
+              <option>Standard (48–72h)</option><option>Rapide (24–48h)</option><option>Urgent (&lt;24h)</option>
+            </select>
+          </div>
+          <label for="photos" class="muted">Photos (max 8)</label>
+          <input id="photos" name="photos" type="file" accept="image/*" multiple>
+          <div id="gallery" class="photos"></div>
+          <textarea name="description" rows="5" placeholder="Décrivez le besoin (ex : disjoncteur, création de 2 prises…)" required></textarea>
+          <button class="btn primary" type="submit">Envoyer ma demande</button>
+        </form>
+        <div id="okMsg" class="muted" style="display:none;margin-top:8px;color:var(--ok)">✅ Demande envoyée. Nous revenons vers vous rapidement.</div>
+        <div id="errMsg" class="muted" style="display:none;margin-top:8px;color:#fb7185">❌ Envoi impossible. Réessayez ou utilisez WhatsApp ci-dessous.</div>
+      </div>
 
-    <label>Email :</label>
-    <input type="email" name="email" required>
+      <!-- Contact direct -->
+      <aside class="card">
+        <h2>Contact direct</h2>
+        <p class="muted">Besoin d’une réponse immédiate ?</p>
+        <a class="btn whatsapp" href="https://wa.me/33769313309" target="_blank" rel="noreferrer">WhatsApp +33 7 69 31 33 09</a>
+        <div style="height:12px"></div>
+        <a class="btn" href="tel:+33769313309">Appeler : +33 7 69 31 33 09</a>
+        <div style="height:12px"></div>
+        <a class="btn" href="mailto:contact@heka-electricite.fr?subject=Demande%20de%20devis">Envoyer un e-mail</a>
+      </aside>
+    </section>
+  </main>
 
-    <label>Téléphone :</label>
-    <input type="tel" name="telephone" required>
+  <footer>
+    <div class="container" style="display:flex;align-items:center;justify-content:space-between;padding:16px 6px;flex-wrap:wrap;gap:8px">
+      <div>© <span id="year"></span> HEKA GROUP – HEKA Électricité</div>
+      <div class="muted">Mentions légales · Confidentialité</div>
+    </div>
+  </footer>
 
-    <label>Type de travaux :</label>
-    <select name="travaux" required>
-      <option value="">Sélectionner...</option>
-      <option>Électricité</option>
-      <option>Plomberie</option>
-      <option>Rénovation</option>
-      <option>Autre</option>
-    </select>
+  <script>
+    // Preview des photos (client)
+    const input = document.getElementById('photos');
+    const gallery = document.getElementById('gallery');
+    if(input){
+      input.addEventListener('change',(e)=>{
+        const files = Array.from(e.target.files||[]).slice(0,8);
+        gallery.innerHTML='';
+        files.forEach((f,i)=>{
+          const url = URL.createObjectURL(f);
+          const d = document.createElement('div');
+          d.className='thumb';
+          d.innerHTML = `<img src="${url}" alt="photo ${i}"><button class="x" type="button">×</button>`;
+          d.querySelector('.x').addEventListener('click',()=>d.remove());
+          gallery.appendChild(d);
+        });
+      });
+    }
 
-    <label>Détails de votre demande :</label>
-    <textarea name="message" rows="5" placeholder="Décrivez votre projet..." required></textarea>
+    // Envoi Formspree (fetch pour feedback utilisateur)
+    const form = document.getElementById('fsForm');
+    const okMsg = document.getElementById('okMsg');
+    const errMsg = document.getElementById('errMsg');
+    if(form){
+      form.addEventListener('submit', async (e)=>{
+        e.preventDefault();
+        okMsg.style.display = 'none';
+        errMsg.style.display = 'none';
+        try{
+          const res = await fetch(form.action, { method:'POST', body: new FormData(form), headers:{ 'Accept':'application/json' }});
+          if(res.ok){ okMsg.style.display='block'; form.reset(); gallery.innerHTML=''; }
+          else { errMsg.style.display='block'; }
+        }catch(_){ errMsg.style.display='block'; }
+      });
+    }
 
-    <button type="submit">Envoyer ma demande</button>
-  </form>
+    // Admin (placeholder: triple-clic sur logo)
+    const badge = document.getElementById('adminBadge');
+    let clicks=0,timer=null;
+    document.getElementById('logoHit').addEventListener('click', ()=>{
+      clicks++; if(timer) clearTimeout(timer); timer=setTimeout(()=>{clicks=0},700);
+      if(clicks>=3){ clicks=0; badge.style.display = (badge.style.display==='none' || !badge.style.display)?'inline-block':'none'; }
+    });
 
-  <div class="contact-info">
-    📞 Téléphone : <strong>+33 7 69 31 33 09</strong><br>
-    📧 Email : publicite.joe@gmail.com
-  </div>
-</section>
-
-<footer>
-  &copy; 2025 HEKA Électricité - Tous droits réservés
-</footer>
-
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
