@@ -1,462 +1,84 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>HEKA Électricité – Demande de devis</title>
-  <meta name="description" content="Demande de devis BTP sans inscription : électricité, plomberie, rénovation. Envoi de photos, récapitulatif prêt à partager.">
-  <style>
-    :root{--bg:#f6f6f7;--txt:#0f1115;--muted:#6b7280;--card:#ffffff;--line:#e5e7eb;--brand:#111;}
-    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial}
-    .container{max-width:1120px;margin:0 auto;padding:24px}
-    header{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.8);backdrop-filter: blur(6px);border-bottom:1px solid var(--line)}
-    .row{display:grid;grid-template-columns:1fr;gap:24px}
-    @media(min-width:960px){.row{grid-template-columns:1.2fr .8fr}}
-    .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
-    .btn{display:inline-flex;align-items:center;justify-content:center;border-radius:14px;border:1px solid var(--line);padding:10px 14px;font-weight:600;background:#fff;cursor:pointer;text-decoration:none;color:var(--txt)}
-    .btn.primary{background:var(--brand);color:#fff;border-color:#000}
-    .btn.light{background:#eee;border-color:#ddd}
-    label{display:block;font-weight:600;margin:8px 0 6px}
-    input[type=text],input[type=email],input[type=tel],input[type=date],input[type=time],select,textarea{
-      width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:14px;outline:none
-    }
-    textarea{min-height:110px;resize:vertical}
-    .muted{color:var(--muted);font-size:12px}
-    .grid2{display:grid;grid-template-columns:1fr;gap:12px}
-    @media(min-width:720px){.grid2{grid-template-columns:1fr 1fr}}
-    .photos{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-    .thumb{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden}
-    .thumb img{width:100%;height:90px;object-fit:cover;display:block}
-    .remove{position:absolute;top:6px;right:6px;background:rgba(255,255,255,.9);border:1px solid var(--line);border-radius:10px;padding:0 6px;cursor:pointer}
-    .rowline{display:flex;align-items:center;justify-content:space-between;background:#fafafa;border:1px solid var(--line);border-radius:12px;padding:8px 10px;margin-top:8px}
-    .hi{color:#065f46;font-weight:700}
-    footer{border-top:1px solid var(--line);margin-top:40px}
-    pre{background:#f1f5f9;border:1px solid var(--line);border-radius:12px;padding:12px;white-space:pre-wrap}
-    .slider{width:100%}
-    .pill{font-size:12px;border:1px solid var(--line);padding:4px 8px;border-radius:999px;background:#fff}
-    .adminOnly{display:none}
-    .adminBadge{display:none}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HEKA Électricité</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        header {
+            background: #007bff;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2em;
+        }
+        section {
+            padding: 20px;
+            max-width: 900px;
+            margin: auto;
+            background: #fff;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+            margin-top: 20px;
+            border-radius: 8px;
+        }
+        h2 {
+            color: #007bff;
+        }
+        footer {
+            text-align: center;
+            padding: 15px;
+            margin-top: 20px;
+            background: #343a40;
+            color: #fff;
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <div class="container" style="display:flex;align-items:center;justify-content:space-between;padding:12px 24px">
-      <div style="display:flex;gap:10px;align-items:center">
-        <div id="logoHit" style="width:36px;height:36px;border-radius:10px;background:#000;color:#fff;display:grid;place-items:center;font-weight:800;user-select:none;cursor:pointer" title="HEKA">H</div>
-        <div>
-          <div style="font-weight:800">HEKA Électricité</div>
-          <div class="muted" style="margin-top:2px">Interventions BTP – France / Suisse</div>
-        </div>
-      </div>
-      <div class="adminBadge pill" id="adminBadge">Admin ON</div>
-    </div>
-  </header>
 
-  <main class="container">
-    <section class="card" style="background:linear-gradient(135deg,#0f0f10,#2a2a2e);color:#fff">
-      <div style="display:grid;grid-template-columns:1fr;gap:18px;align-items:center">
-        <div>
-          <h1 style="margin:0;font-size:28px;line-height:1.2">Faites réparer, installer, rénover.<br/>Sans inscription. 100% en ligne.</h1>
-          <p style="margin:10px 0 0;color:#cbd5e1">Envoyez votre besoin + photos. Nous vous recontactons rapidement avec un devis.</p>
-          <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
-            <a class="btn primary" href="#form">Décrire mon besoin</a>
-            <a class="btn" href="#how">Comment ça marche</a>
-          </div>
-        </div>
-      </div>
-    </section>
+<header>
+    <h1>HEKA Électricité</h1>
+    <p>Votre partenaire de confiance pour tous vos travaux d’électricité et du bâtiment</p>
+</header>
 
-    <div class="row" id="form" style="margin-top:16px">
-      <div>
-        <div class="card">
-          <h2 style="margin:4px 0 8px">Votre besoin</h2>
-          <div class="muted">Pas de compte. 2 minutes chrono.</div>
+<section>
+    <h2>Qui sommes-nous ?</h2>
+    <p>
+        HEKA Électricité est une société innovante qui met en relation les particuliers et les professionnels avec des 
+        artisans qualifiés dans le domaine de l’électricité et des métiers du BTP.  
+        Nous travaillons exclusivement avec des artisans partenaires soigneusement sélectionnés pour leur savoir-faire et leur expérience.
+    </p>
 
-          <div class="grid2" style="margin-top:10px">
-            <div>
-              <label>Nom / Prénom</label>
-              <input id="name" type="text" placeholder="Jean Dupont"/>
-            </div>
-            <div>
-              <label>Téléphone</label>
-              <input id="phone" type="tel" placeholder="06…"/>
-            </div>
-            <div>
-              <label>Email</label>
-              <input id="email" type="email" placeholder="vous@email.com"/>
-            </div>
-            <div>
-              <label>Ville</label>
-              <input id="city" type="text" placeholder="Saint-Étienne"/>
-            </div>
-            <div class="grid2" style="grid-column:1/-1">
-              <div>
-                <label>Adresse (optionnel)</label>
-                <input id="address" type="text" placeholder="9 rue Théodore de Banville"/>
-              </div>
-            </div>
+    <h2>Nos valeurs</h2>
+    <p>
+        ✔ Expertise : chaque artisan est un spécialiste dans son domaine.  
+        ✔ Fiabilité : nous respectons les délais et les engagements.  
+        ✔ Sécurité : un expert indépendant contrôle chaque intervention en fin de chantier pour garantir la conformité et la sécurité de vos installations.
+    </p>
 
-            <div>
-              <label>Catégorie</label>
-              <select id="category">
-                <option value="electricite">Électricité</option>
-                <option value="plomberie">Plomberie</option>
-                <option value="chauffage">Chauffage</option>
-                <option value="climatisation">Climatisation</option>
-                <option value="peinture">Peinture</option>
-                <option value="renovation">Rénovation</option>
-                <option value="autre">Autre</option>
-              </select>
-            </div>
+    <h2>Notre engagement qualité</h2>
+    <p>
+        Pour chaque projet, nous assurons un suivi rigoureux :  
+        - Évaluation précise de vos besoins  
+        - Intervention rapide et efficace  
+        - Vérification finale par un expert certifié  
+        - Remise d’un rapport de conformité
+    </p>
+</section>
 
-            <div>
-              <label>Urgence</label>
-              <select id="urgency">
-                <option value="standard">Standard (48–72h)</option>
-                <option value="rapide">Rapide (24–48h)</option>
-                <option value="urgent24h">Urgent (&lt;24h)</option>
-              </select>
-            </div>
+<footer>
+    &copy; 2025 HEKA Électricité - Tous droits réservés
+</footer>
 
-            <div style="grid-column:1/-1">
-              <label>Complexité (1 facile → 5 complexe)</label>
-              <input id="complexity" class="slider" type="range" min="1" max="5" step="1" value="2"/>
-              <div class="muted">Niveau: <span id="cxv">2</span>/5</div>
-            </div>
-
-            <div style="grid-column:1/-1">
-              <label>Fourniture des matériaux</label>
-              <div style="display:flex;gap:8px;flex-wrap:wrap">
-                <button type="button" class="btn" id="matClient">Client</button>
-                <button type="button" class="btn" id="matPro">HEKA (pro)</button>
-              </div>
-            </div>
-
-            <div style="grid-column:1/-1">
-              <label>Décrivez le problème / besoin</label>
-              <textarea id="desc" placeholder="Disjoncteur qui saute, création de 2 prises, fuite sous évier…"></textarea>
-            </div>
-
-            <div style="grid-column:1/-1">
-              <label>Photos (max 8)</label>
-              <input id="photos" type="file" accept="image/*" multiple />
-              <div id="gallery" class="photos" style="margin-top:8px"></div>
-            </div>
-
-            <div>
-              <label>Date souhaitée</label>
-              <input id="date" type="date"/>
-            </div>
-            <div>
-              <label>Heure souhaitée</label>
-              <input id="time" type="time"/>
-            </div>
-          </div>
-
-          <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
-            <a id="mailtoBtn" class="btn primary" href="#">Envoyer par e-mail</a>
-            <a id="waBtn" class="btn" target="_blank" rel="noreferrer" href="#">Partager via WhatsApp</a>
-            <button id="copyBtn" class="btn light">Copier le récapitulatif</button>
-          </div>
-          <p class="muted" style="margin-top:6px">En envoyant, vous acceptez notre traitement minimal des données pour répondre à votre demande. Aucun compte requis.</p>
-        </div>
-      </div>
-
-      <!-- ADMIN PANEL (hidden by default) -->
-      <div id="adminCol" class="adminOnly">
-        <div class="card">
-          <h3 style="margin:4px 0 8px">Estimation indicative (interne)</h3>
-          <div class="muted">Réservé à HEKA. Non visible par le client.</div>
-
-          <div id="estRows" style="margin-top:8px"></div>
-
-          <div style="margin-top:10px">
-            <label>Ajuster la marge</label>
-            <input id="margin" class="slider" type="range" min="0" max="150" value="70"/>
-            <div class="muted" style="display:flex;justify-content:space-between"><span>0%</span><span>150%</span></div>
-          </div>
-
-          <div style="margin-top:10px">
-            <label><input type="checkbox" id="includePrice"/> Inclure les montants dans le récap client</label>
-            <div class="muted">Par défaut, le récap envoyé NE contient PAS de prix.</div>
-          </div>
-
-          <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
-            <button class="btn light" onclick="window.print()">Imprimer / PDF</button>
-            <button id="recapBtn" class="btn">Voir récapitulatif</button>
-          </div>
-        </div>
-
-        <div class="card" style="margin-top:12px">
-          <div style="display:flex;gap:8px;align-items:center;justify-content:space-between">
-            <div class="muted">Mode admin actif sur CE navigateur.</div>
-            <button id="logoutAdmin" class="btn light">Quitter admin</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <section id="recap" class="card" style="margin-top:14px;display:none">
-      <h3 style="margin:4px 0 8px">Récapitulatif prêt à envoyer</h3>
-      <pre id="summaryBox"></pre>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn primary" id="copyBtn2">Copier</button>
-        <a class="btn" id="waBtn2" target="_blank" rel="noreferrer" href="#">WhatsApp</a>
-        <a class="btn light" id="mailtoBtn2" href="#">E-mail</a>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="container" style="display:flex;align-items:center;justify-content:space-between;padding:18px 0;flex-wrap:wrap;gap:8px">
-      <div class="muted">© <span id="year"></span> HEKA GROUP – HEKA Électricité</div>
-      <div class="muted" style="display:flex;gap:12px">
-        <a href="#" style="color:inherit;text-decoration:none">Mentions légales</a>
-        <a href="#" style="color:inherit;text-decoration:none">Confidentialité</a>
-        <a href="#" style="color:inherit;text-decoration:none">Contact</a>
-      </div>
-    </div>
-  </footer>
-
-  <script>
-    // ===== Helpers
-    const € = (v)=> new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR'}).format(v);
-    const fmt = (v)=> v==null?'':String(v).trim();
-    const byId = (id)=> document.getElementById(id);
-
-    // ===== State
-    const state = {
-      materials: 'client',
-      marginPct: 70,
-      photos: [],
-      admin: false,
-      includePrice: false,
-      adminPass: 'HEKA2025', // change facilement ici si besoin
-    };
-
-    const basePrices = {
-      electricite:120, plomberie:110, chauffage:140, climatisation:160, peinture:90, renovation:180, autre:100
-    };
-    const urgencyMul = { standard:1, rapide:1.25, urgent24h:1.5 };
-    const matMul = { client:1, pro:1.35 };
-    const cxMul = (c)=> 0.8 + c*0.3; // 1->1.1 ... 5->2.3
-
-    function computeEstimate(){
-      const cat = byId('category').value;
-      const base = basePrices[cat]||100;
-      const m = base * urgencyMul[byId('urgency').value] * matMul[state.materials] * cxMul(Number(byId('complexity').value));
-      const withMargin = m * (1 + state.marginPct/100);
-      const estHT = Math.round(withMargin/5)*5;
-      const estTTC = estHT * 1.2; // TVA 20%
-      renderRows(base, estHT, estTTC);
-      return {base, estHT, estTTC};
-    }
-
-    function renderRows(base, estHT, estTTC){
-      if(!state.admin) return; // ne rend rien si pas admin
-      const rows = [
-        ['Base', €(base)],
-        ['Urgence', '× '+ urgencyMul[byId('urgency').value]],
-        ['Matériaux', '× '+ matMul[state.materials]],
-        ['Complexité', '× '+ cxMul(Number(byId('complexity').value)).toFixed(2)],
-        ['—','—'],
-        ['Marge HEKA', state.marginPct+'%'],
-        ['Estimation HT', €(estHT), true],
-        ['Estimation TTC (TVA 20%)', €(estTTC)]
-      ];
-      const box = byId('estRows');
-      box.innerHTML = '';
-      rows.forEach(([label,val,hi])=>{
-        const d = document.createElement('div');
-        d.className='rowline';
-        d.innerHTML = `<div class="muted" style="color:#374151">${label}</div><div class="${hi?'hi':''}">${val}</div>`;
-        box.appendChild(d);
-      });
-    }
-
-    function catLabel(id){
-      const map = {electricite:'Électricité', plomberie:'Plomberie', chauffage:'Chauffage', climatisation:'Climatisation', peinture:'Peinture', renovation:'Rénovation', autre:'Autre'};
-      return map[id]||id;
-    }
-
-    function buildSummary(){
-      const {estHT, estTTC} = computeEstimate();
-      const name = fmt(byId('name').value);
-      const phone = fmt(byId('phone').value);
-      const email = fmt(byId('email').value);
-      const address = fmt(byId('address').value);
-      const city = fmt(byId('city').value);
-      const category = catLabel(byId('category').value);
-      const urgency = {standard:'Standard (48–72h)', rapide:'Rapide (24–48h)', urgent24h:'Urgent (<24h)'}[byId('urgency').value];
-      const complexity = byId('complexity').value;
-      const mat = state.materials==='pro'?'HEKA (pro)':'Client';
-      const desc = fmt(byId('desc').value);
-      const date = fmt(byId('date').value);
-      const time = fmt(byId('time').value);
-      const pref = (date||time)? (date+' '+time).trim() : 'Non précisé';
-
-      const lines = [
-        'HEKA Électricité – Demande','',
-        `Client: ${name}`,
-        `Téléphone: ${phone}`,
-        `Email: ${email}`,
-        `Adresse: ${address} ${city}`,
-        `Catégorie: ${category}`,
-        `Urgence: ${urgency}`,
-        `Complexité: ${complexity}/5`,
-        `Fourniture matériaux: ${mat}`,
-        '',
-        'Description:',
-        desc || '(non précisée)',
-        ''
-      ];
-
-      if(state.admin && state.includePrice){
-        lines.push(
-          `Estimation (indicative): ${€(estHT)} HT (~${€(estTTC)} TTC)`,
-          '',
-          `Marge (interne): ${state.marginPct}%`
-        );
-      }
-
-      lines.push('', `Préférence d’intervention: ${pref}`);
-      return lines.join('\n');
-    }
-
-    function mailtoLink(summary, to='contact@heka-electricite.com'){
-      const subject = encodeURIComponent('Demande de devis – HEKA Électricité');
-      const body = encodeURIComponent(summary);
-      return `mailto:${to}?subject=${subject}&body=${body}`;
-    }
-    function waLink(summary){
-      const msg = encodeURIComponent(summary);
-      return `https://wa.me/?text=${msg}`;
-    }
-
-    // ===== UI wiring (client)
-    byId('complexity').addEventListener('input', e=>{
-      byId('cxv').textContent = e.target.value;
-      computeEstimate();
-    });
-    ['category','urgency'].forEach(id=> byId(id).addEventListener('change', computeEstimate));
-
-    // Materials buttons
-    function refreshMatButtons(){
-      byId('matClient').className = 'btn' + (state.materials==='client'?' primary':'');
-      byId('matPro').className    = 'btn' + (state.materials==='pro'   ?' primary':'');
-    }
-    byId('matClient').addEventListener('click', ()=>{state.materials='client'; refreshMatButtons(); computeEstimate();});
-    byId('matPro').addEventListener('click', ()=>{state.materials='pro'; refreshMatButtons(); computeEstimate();});
-    refreshMatButtons();
-
-    // Admin-only controls
-    const marginInput = byId('margin');
-    const storedMargin = localStorage.getItem('heka_margin_pct');
-    if(storedMargin){ state.marginPct = Number(storedMargin); if(marginInput) marginInput.value = state.marginPct; }
-    if(marginInput){
-      marginInput.addEventListener('input', e=>{
-        state.marginPct = Number(e.target.value);
-        localStorage.setItem('heka_margin_pct', String(state.marginPct));
-        computeEstimate();
-      });
-    }
-
-    const includePrice = byId('includePrice');
-    if(includePrice){
-      const saved = localStorage.getItem('heka_include_price');
-      if(saved){ state.includePrice = saved === '1'; includePrice.checked = state.includePrice; }
-      includePrice.addEventListener('change', e=>{
-        state.includePrice = !!e.target.checked;
-        localStorage.setItem('heka_include_price', state.includePrice?'1':'0');
-      });
-    }
-
-    // Photos preview
-    byId('photos').addEventListener('change', (e)=>{
-      const files = Array.from(e.target.files||[]).slice(0,8);
-      state.photos = files;
-      const gal = byId('gallery'); gal.innerHTML='';
-      files.forEach((f,i)=>{
-        const url = URL.createObjectURL(f);
-        const d = document.createElement('div');
-        d.className='thumb';
-        d.innerHTML = `<img src="${url}" alt="photo ${i}"><button class="remove" title="Supprimer">×</button>`;
-        d.querySelector('.remove').addEventListener('click', ()=>{
-          state.photos.splice(i,1);
-          d.remove();
-        });
-        gal.appendChild(d);
-      });
-    });
-
-    // Sharing buttons
-    function updateShareLinks(){
-      const s = buildSummary();
-      byId('mailtoBtn') && byId('mailtoBtn').setAttribute('href', mailtoLink(s));
-      byId('waBtn') && byId('waBtn').setAttribute('href', waLink(s));
-      byId('mailtoBtn2') && byId('mailtoBtn2').setAttribute('href', mailtoLink(s));
-      byId('waBtn2') && byId('waBtn2').setAttribute('href', waLink(s));
-      byId('summaryBox') && (byId('summaryBox').textContent = s);
-    }
-    byId('copyBtn').addEventListener('click', ()=>{navigator.clipboard.writeText(buildSummary()); alert('Récapitulatif copié.');});
-    byId('copyBtn2').addEventListener('click', ()=>{navigator.clipboard.writeText(buildSummary()); alert('Récapitulatif copié.');});
-    ['mailtoBtn','waBtn','mailtoBtn2','waBtn2'].forEach(id=>{
-      const el = byId(id);
-      if(!el) return;
-      el.addEventListener('click', ()=> updateShareLinks());
-    });
-
-    // Recap toggle
-    const recapBtn = byId('recapBtn');
-    if(recapBtn){
-      recapBtn.addEventListener('click', ()=>{
-        updateShareLinks();
-        byId('recap').style.display='block';
-        window.location.hash = '#recap';
-      });
-    }
-
-    // ===== Admin gate (triple‑click logo + passcode)
-    const logo = byId('logoHit');
-    let clicks = 0, timer = null;
-    function resetClicks(){ clicks = 0; if(timer){clearTimeout(timer); timer=null;} }
-    logo.addEventListener('click', ()=>{
-      clicks++; if(timer) clearTimeout(timer);
-      timer = setTimeout(()=> resetClicks(), 700);
-      if(clicks>=3){
-        resetClicks();
-        const code = prompt('Code admin ?');
-        if(code && code === state.adminPass){
-          enableAdmin();
-        } else {
-          alert('Code incorrect');
-        }
-      }
-    });
-
-    function enableAdmin(){
-      state.admin = true;
-      localStorage.setItem('heka_admin','1');
-      byId('adminCol').classList.remove('adminOnly');
-      byId('adminBadge').style.display='inline-block';
-      computeEstimate();
-    }
-    function disableAdmin(){
-      state.admin = false;
-      localStorage.removeItem('heka_admin');
-      byId('adminCol').classList.add('adminOnly');
-      byId('adminBadge').style.display='none';
-    }
-
-    const logout = byId('logoutAdmin');
-    if(logout){ logout.addEventListener('click', disableAdmin); }
-
-    // Auto-restore admin on this browser (optional)
-    if(localStorage.getItem('heka_admin')==='1'){ enableAdmin(); }
-
-    // Init
-    computeEstimate();
-    byId('year').textContent = new Date().getFullYear();
-  </script>
 </body>
 </html>
